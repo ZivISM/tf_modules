@@ -1,5 +1,5 @@
 # Insert variables here for a full sftp server, s3 bucket, route53, and iam.check "name" {
-# The module doesnot create an alb, so you need to create an alb and pass the name to the module.
+# The module does not create an alb, so you need to create an alb and pass the name to the module.
 
 module "sftp_transfer" {
   source = "./modules/transfer_server"
@@ -18,11 +18,6 @@ module "sftp_transfer" {
   force_destroy      = 
   route53_record_zone = 
   alb_name           = 
-
-###############################################################################
-# Domain Contact
-###############################################################################
-  domain_contact     = 
 
 ###############################################################################
 # IAM

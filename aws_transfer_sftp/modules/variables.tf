@@ -58,26 +58,3 @@ variable "route53_record_zone" {
   type = string
   description = "The Route53 zone ID"
 }
-
-variable "alb_name" {
-  type = string
-  description = "The ALB name"
-}
-
-###############################################################################
-# Route53 Domain Registration
-###############################################################################
-variable "domain_contact" {
-  description = "Domain registration contact details"
-  type = object({
-    first_name          = string
-    last_name           = string
-    email               = string
-    phone_number        = string
-    address_line_1      = string
-    city                = string
-    state               = string
-    country_code        = string
-    zip_code            = string
-  })
-}

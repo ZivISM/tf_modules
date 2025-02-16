@@ -21,6 +21,23 @@ This Terraform project sets up a secure SFTP server using AWS Transfer Family wi
 1. Clone this repository
 2. Update the variables in `main.tf` with your configuration:
 
+```hcl
+module "sftp_transfer" {
+  source = "./modules/transfer_server"
+  project = "my-project"
+  
+  transfer_server_name = "sftp-server"
+  s3_bucket_name = "my-sftp-bucket"
+  
+  domain_name = "example.com" # Your pre-registered domain
+  auto_renew = true
+  force_destroy = true
+  route53_record_zone = "Z012345678901234567890"
+  
+  sftp_username = "sftp-user"
+  sftp_home_directory = "/sftp"
+}
+```
 
 ## Load Balancer Considerations
 

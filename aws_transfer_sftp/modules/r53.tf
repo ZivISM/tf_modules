@@ -13,40 +13,6 @@ resource "aws_route53_zone" "main" {
 }
 
 ###############################################################################
-# Route53 Domain Registration
-###############################################################################
-resource "aws_route53domains_registered_domain" "main" {
-  domain_name = var.domain_name
-  auto_renew  = var.auto_renew
-
-  registrant_contact {
-    first_name        = var.domain_contact.first_name
-    last_name         = var.domain_contact.last_name
-    email            = var.domain_contact.email
-    phone_number     = var.domain_contact.phone_number
-    address_line_1   = var.domain_contact.address_line_1
-    city            = var.domain_contact.city
-    state           = var.domain_contact.state
-    country_code    = var.domain_contact.country_code
-    zip_code        = var.domain_contact.zip_code
-  }
-
-  dynamic "name_server" {
-    for_each = aws_route53_zone.main.name_servers
-    content {
-      name = name_server.value
-    }
-  }
-
-  tags = {
-    Name    = var.domain_name
-    Project = var.project
-  }
-
-  depends_on = [aws_route53_zone.main]
-}
-
-###############################################################################
 # Route53 Records
 ###############################################################################
 resource "aws_route53_record" "sftp" {
@@ -55,22 +21,26 @@ resource "aws_route53_record" "sftp" {
   type    = "A"
 
   alias {
-    name                   = data.aws_alb.alb.dns_name
-    zone_id               = data.aws_alb.alb.zone_id
+    name                   = aws_api_gateway_domain_name.sftp.regional_domain_name
+    zone_id               = aws_api_gateway_domain_name.sftp.regional_zone_id
     evaluate_target_health = true
   }
-
-  depends_on = [aws_route53_zone.main]
 }
 
-data "aws_alb" "alb" {
-  name = var.alb_name
-
-  depends_on = [aws_route53_zone.main]
+resource "aws_api_gateway_domain_name" "sftp" {
+  domain_name              = "sftp.${var.domain_name}"
+  regional_domain_name     = "sftp.${var.domain_name}"
+  regional_certificate_arn = module.acm.acm_certificate_arn
+  security_policy         = "TLS_1_3"
+  
+  tags = {
+    Name    = "sftp.${var.domain_name}"
+    Project = var.project
+  }
 }
 
 ###############################################################################
-# ACM
+# ACM Certificate
 ###############################################################################
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
@@ -95,3 +65,4 @@ module "acm" {
 
   depends_on = [aws_route53_zone.main]
 }
+
