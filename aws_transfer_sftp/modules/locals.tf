@@ -15,15 +15,16 @@ locals {
     s3 = {
       service         = "s3"
       service_type    = "Gateway"
-      route_table_ids = module.vpc.private_route_table_ids
+      route_table_ids = var.create_vpc ? module.vpc[0].private_route_table_ids : []
     }
     transfer = {
       service             = "transfer.server"
+      service_type        = "Interface"
+      subnet_ids          = var.create_vpc ? module.vpc[0].private_subnets : var.existing_subnet_ids
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     }
   }
 
-  # Merge base endpoints with user-provided endpoints if any exist
-  vpc_endpoints = length(var.additional_allowed_endpoints) > 0 ? merge(local.base_endpoints, var.additional_allowed_endpoints) : local.base_endpoints
+  # Merge base endpoints with any additional endpoints
+  vpc_endpoints = merge(local.base_endpoints, var.additional_allowed_endpoints)
 }

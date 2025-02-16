@@ -4,12 +4,12 @@ module "sftp_transfer" {
 
   # Project Configuration
   project              = 
+  aws_region           = 
+  use_vpc    = 
   transfer_server_name = 
   s3_bucket_name       = 
-  aws_region           = 
 
   # VPC Configuration
-  use_vpc    = 
   create_vpc =   # Set to false if using existing VPC
   vpc_cidr   = 
   num_zones  = 
