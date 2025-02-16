@@ -123,17 +123,6 @@ terraform apply
    - Check S3 bucket policy
    - Confirm SFTP user home directory configuration
 
-## 📚 Additional Resources
-
-<div align="center">
-
-[![AWS Transfer Family](https://img.shields.io/badge/AWS_Transfer_Family-Documentation-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/aws-transfer-family/)
-
-[![Terraform AWS](https://img.shields.io/badge/Terraform_AWS-Provider-844FBA?style=for-the-badge&logo=terraform&logoColor=white)](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-
-[![SFTP Protocol](https://img.shields.io/badge/SFTP-Protocol_Info-blue?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAggAAAIIBsKhZvgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADSSURBVCiRrdKxSgNBFIXh7x4XUohEwcI2YGFSWPkAFnZ2PkIKwSewS2nvM/gMvoGNjYWVhYVFCjsLEUQMWkjAxkKy7NwwzYz3wOEwc/4z91Jqf1+FTnAok2zgnB0c4wKPeJT0jzBExm+DK7zjDt2qQR0c4hS3+MQIrxjjDef4wD0+sITlVLKJTfRxg0u84AWvuEMPK1jFGvbSxHvYxgBPmOAZ2+igwCLmsYANbKUVh3jHN6YY4wt97KJZtXJR/UX8j6qG/4OaZPgzKqk9/QDwYzuclEeJ0QAAAABJRU5ErkJggg==)](https://tools.ietf.org/html/rfc4251)
-
-</div>
 
 ## 🤝 Contributing
 
