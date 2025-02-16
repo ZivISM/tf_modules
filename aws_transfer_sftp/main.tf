@@ -14,8 +14,8 @@ module "sftp_transfer" {
   ###############################################################################
   # VPC Configuration
   ###############################################################################
-  use_vpc    = true    # Required: Whether to use VPC (true/false)
-  create_vpc = true    # Required: Whether to create new VPC (true/false)
+  use_vpc    = false    # Required: Whether to use VPC (true/false)
+  create_vpc = false    # Required: Whether to create new VPC (true/false)
 
   # Required if create_vpc = true
   vpc_cidr            = "10.0.0.0/16"
