@@ -36,16 +36,25 @@ resource "aws_route53_record" "sftp" {
   records = [aws_transfer_server.sftp.endpoint]
 }
 
-resource "aws_api_gateway_domain_name" "sftp" {
-  domain_name              = "sftp.${var.domain_name}"
 
-  regional_certificate_arn = module.acm[0].acm_certificate_arn
-  security_policy         = "TLS_1_2"
+resource "aws_api_gateway_domain_name" "sftp" {
+  count = var.use_vpc && var.create_hosted_zone ? 1 : 0
+
+  domain_name = "sftp.${var.domain_name}"
+  
+  # Use coalesce with null to handle empty module
+  regional_certificate_arn = var.use_vpc && var.create_hosted_zone ? (
+    coalesce(try(module.acm[0].acm_certificate_arn, null), null)
+  ) : null
+  
+  security_policy = "TLS_1_2"
   
   tags = {
     Name    = "sftp.${var.domain_name}"
     Project = var.project
   }
+
+  depends_on = [module.acm]
 }
 
 ###############################################################################
@@ -69,5 +78,7 @@ module "acm" {
     Project   = var.project
     Terraform = "true"
   }
+
+  depends_on = [ aws_route53_zone.main ]
 }
 

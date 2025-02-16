@@ -10,7 +10,9 @@ module "sftp_transfer" {
   transfer_server_name = "zivoosh-testing-sftp-server"   # Required: Name for the SFTP server
   s3_bucket_name      = "zivoosh-testing-s3-bucket"     # Required: S3 bucket name for SFTP storage
   sftp_username       = "zivoosh-testing-sftp-user"     # Required: SFTP user name
-
+  tags = {
+    Project = "zivoosh-testing"
+  }
   ###############################################################################
   # VPC Configuration
   ###############################################################################

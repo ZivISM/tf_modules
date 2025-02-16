@@ -24,6 +24,8 @@ resource "aws_transfer_server" "sftp" {
     Name    = var.transfer_server_name
     Project = var.project
   }
+
+  depends_on = [ module.vpc ]
 }
 
 ###############################################################################
@@ -40,23 +42,35 @@ resource "aws_transfer_user" "sftp_user" {
     entry  = "/"
     target = "/${module.s3_bucket.s3_bucket_id}${var.sftp_home_directory}"
   }
+
+  tags = merge(
+    local.tags,
+    {
+      Name = "${var.transfer_server_name}-user"
+    }
+  )
+  
+  depends_on = [ aws_transfer_server.sftp ]
 }
 
 ###############################################################################
 # Security Group (VPC only)
 ###############################################################################
+
+
 resource "aws_security_group" "sftp" {
   count = var.use_vpc ? 1 : 0
-  
-  name        = "${var.project}-sftp-sg"
+
+  name        = "${var.transfer_server_name}-sg"
   description = "Security group for SFTP server"
   vpc_id      = local.vpc_id
 
   ingress {
+    description = "SFTP"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = module.vpc[0].private_subnet_cidrs
+    cidr_blocks = local.security_group_cidrs
   }
 
   egress {
@@ -66,8 +80,10 @@ resource "aws_security_group" "sftp" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name    = "${var.project}-sftp-sg"
-    Project = var.project
-  }
+  tags = merge(
+    local.tags,
+    {
+      Name = "${var.transfer_server_name}-sg"
+    }
+  )
 }

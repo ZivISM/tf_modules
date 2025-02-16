@@ -11,6 +11,10 @@ variable "aws_region" {
   description = "The AWS region"
 }
 
+variable "tags" {
+  type = map(string)
+  description = "The tags to apply to the resources"
+}
 
 ###############################################################################
 # Transfer Server 

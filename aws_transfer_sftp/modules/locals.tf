@@ -27,3 +27,22 @@ locals {
   # Merge base endpoints with any additional endpoints
   vpc_endpoints = merge(local.base_endpoints, var.additional_allowed_endpoints)
 }
+
+###############################################################################
+# Tags
+###############################################################################
+locals {
+  tags = merge(var.tags, {
+    Project = var.project
+  })
+}
+
+###############################################################################
+# Security Group CIDRs
+###############################################################################
+locals {
+  # Define CIDR blocks based on VPC usage
+  security_group_cidrs = var.use_vpc ? (
+    try(module.vpc[0].private_subnets_cidr_blocks, [var.vpc_cidr])
+  ) : ["0.0.0.0/0"]
+}

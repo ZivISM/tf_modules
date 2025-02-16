@@ -54,13 +54,23 @@ locals {
 # VPC Endpoints (Only if VPC is created)
 ###############################################################################
 module "vpc_endpoints" {
-  source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "~> 5.0"
+  source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   
   count = var.create_vpc ? 1 : 0
 
-  vpc_id             = var.create_vpc ? module.vpc[0].vpc_id : var.existing_vpc_id
-  security_group_ids = [ aws_security_group.sftp.id ]
-  
+  vpc_id = local.vpc_id
+
+  # Reference security group with index when it exists
+  security_group_ids = var.use_vpc ? [aws_security_group.sftp[0].id] : []
+
   endpoints = local.vpc_endpoints
+
+  tags = merge(
+    local.tags,
+    {
+      Name = "${var.project}-vpc-endpoints"
+    }
+  )
+
+  depends_on = [module.vpc]
 }
