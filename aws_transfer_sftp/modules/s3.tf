@@ -15,4 +15,3 @@ module "s3_bucket" {
     Project = var.project
   }
 }
-

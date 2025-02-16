@@ -6,9 +6,29 @@ variable "project" {
   description = "The project name"
 }
 
+variable "aws_region" {
+  type = string
+  description = "The AWS region"
+}
+
+
+###############################################################################
+# Transfer Server 
+###############################################################################
 variable "transfer_server_name" {
   type = string
   description = "The transfer server name"
+}
+
+variable "sftp_username" {
+  description = "Username for SFTP access"
+  type        = string
+}
+
+variable "sftp_home_directory" {
+  description = "Home directory path in the S3 bucket"
+  type        = string
+  default     = "/home"
 }
 
 variable "s3_bucket_name" {
@@ -60,18 +80,4 @@ variable "domain_contact" {
     country_code        = string
     zip_code            = string
   })
-}
-
-###############################################################################
-# IAM
-###############################################################################
-variable "sftp_username" {
-  description = "Username for SFTP access"
-  type        = string
-}
-
-variable "sftp_home_directory" {
-  description = "Home directory path in the S3 bucket"
-  type        = string
-  default     = "/home"
 }
