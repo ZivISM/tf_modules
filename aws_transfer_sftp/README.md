@@ -57,20 +57,38 @@ terraform apply
 
 ## 🔍 Infrastructure Validation
 
-### DNS and Connectivity Testing
+### For VPC-based SFTP servers:
 
-```bash
-# Test DNS resolution
-dig <your-sftp-endpoint>
+1. **Connect from within the VPC**
+   - Use an EC2 instance in the same VPC as a bastion/jump host
+   - Install SFTP client on the EC2 instance:
+   ```bash
+   # On Amazon Linux
+   sudo yum install -y openssh-clients
+   
+   # Test SFTP connection
+   sftp username@VPC-endpoint
+   ```
 
-# Test SFTP connectivity
-sftp -P 22 username@<your-sftp-endpoint>
-```
+2. **Test using AWS CLI from within VPC**
+   ```bash
+   # Check if endpoint is reachable
+   aws transfer test-connection-status \
+     --server-id s-xxxx \
+     --region your-region
+   
+   # List SFTP users
+   aws transfer list-users --server-id s-xxxx
+   ```
 
-### S3 Access Verification
-```bash
-# List contents of SFTP home directory
-aws s3 ls s3://<your-bucket>/<sftp-home-directory>
+3. **VPC Endpoint Verification**
+   ```bash
+   # Check VPC endpoints
+   aws ec2 describe-vpc-endpoints \
+     --filters Name=vpc-id,Values=vpc-xxx
+   ```
+
+### For Public SFTP servers:
 ```
 
 ## 🛡️ Security Features
