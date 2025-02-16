@@ -5,11 +5,11 @@ module "sftp_transfer" {
   ###############################################################################
   # Required Configuration
   ###############################################################################
-  project              = "my-project"    # Required: Project name
+  project              = "zivoosh-testing"    # Required: Project name
   aws_region          = "us-east-1"     # Required: AWS region
-  transfer_server_name = "sftp-server"   # Required: Name for the SFTP server
-  s3_bucket_name      = "my-bucket"     # Required: S3 bucket name for SFTP storage
-  sftp_username       = "sftp-user"     # Required: SFTP user name
+  transfer_server_name = "zivoosh-testing-sftp-server"   # Required: Name for the SFTP server
+  s3_bucket_name      = "zivoosh-testing-s3-bucket"     # Required: S3 bucket name for SFTP storage
+  sftp_username       = "zivoosh-testing-sftp-user"     # Required: SFTP user name
 
   ###############################################################################
   # VPC Configuration
@@ -31,11 +31,11 @@ module "sftp_transfer" {
   # Route53 Configuration (Optional)
   ###############################################################################
   create_hosted_zone  = true               # Whether to create Route53 hosted zone
-  domain_name         = "example.com"      # Required if create_hosted_zone = true
-  auto_renew         = true               # Required if create_hosted_zone = true
+  domain_name         = "zivoosh.xyz"      # Required if create_hosted_zone = true
+  auto_renew         = false               # Required if create_hosted_zone = true
   force_destroy      = true               # Required if create_hosted_zone = true
-  route53_record_zone = "Z123456789ABC"   # Required if create_hosted_zone = true
-
+  route53_record_zone_id = "Z123456789ABC"   # Required if create_hosted_zone = false
+  
   ###############################################################################
   # SFTP Configuration
   ###############################################################################

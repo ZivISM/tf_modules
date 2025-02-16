@@ -66,9 +66,9 @@ variable "force_destroy" {
   description = "Whether to force destroy the Route53 zone"
 }
 
-variable "route53_record_zone" {
+variable "route53_record_zone_id" {
   type = string
-  description = "The Route53 zone ID"
+  description = "The Route53 zone ID for the existing hosted zone"
 }
 
 ###############################################################################
