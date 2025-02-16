@@ -1,65 +1,121 @@
-# AWS SFTP Transfer Server with S3 Backend
+# AWS Transfer Family (SFTP) Infrastructure
 
-This Terraform project sets up a secure SFTP server using AWS Transfer Family with an S3 bucket backend, complete with Route53 DNS configuration and IAM roles.
+This repository contains Terraform configurations for deploying a secure SFTP server using AWS Transfer Family, integrated with S3 storage and Route53 DNS management.
 
-## Features
+## 🏗 Architecture Overview
 
-- AWS Transfer Family SFTP server
-- S3 bucket backend for file storage
-- Route53 DNS configuration with custom domain
-- IAM roles and policies for secure access
-- Application Load Balancer integration
+The infrastructure consists of:
+- AWS Transfer Family SFTP Server
+- S3 Bucket for SFTP storage
+- VPC with private subnets (optional)
+- Route53 DNS management
+- ACM Certificate for secure transfers
 
-## Prerequisites
+## 📋 Prerequisites
 
 - Terraform >= 1.0
 - AWS CLI configured with appropriate credentials
-- A registered domain name (for Route53 configuration and api gateway)
+- Domain registered in AWS Route53 (if using DNS features)
+- AWS account with appropriate permissions
 
-## Usage
+## 🚀 Quick Start
 
 1. Clone this repository
-2. Update the variables in `main.tf` with your configuration:
+2. Update the variables in `main.tf`
+3. Initialize and apply:
 
-```hcl
-module "sftp_transfer" {
-  source = "./modules/transfer_server"
-  
-  project              = "my-project"
-  transfer_server_name = "sftp-server"
-  s3_bucket_name       = "my-sftp-bucket"
-  
-  domain_name = "example.com" # Your pre-registered domain
-  auto_renew = true
-  force_destroy = true
-  route53_record_zone = "Z012345678901234567890"
-  
-  sftp_username = "sftp-user"
-  sftp_home_directory = "/sftp"
-}
+```bash
+terraform init
+terraform apply
 ```
 
-## Load Balancer Considerations
+## 🔧 Configuration Options
 
-This infrastructure uses direct DNS routing without a load balancer since we're utilizing AWS managed services with their own endpoints. Here's why:
+### Required Variables
+| Variable | Description | Type | Default |
+|----------|-------------|------|---------|
+| `project` | Project name | `string` | - |
+| `aws_region` | AWS region | `string` | - |
+| `transfer_server_name` | SFTP server name | `string` | - |
+| `s3_bucket_name` | S3 bucket name | `string` | - |
+| `sftp_username` | SFTP username | `string` | - |
 
-### When You Don't Need a Load Balancer
-- Using AWS services with built-in endpoints (API Gateway, S3, RDS, etc.)
-- Domain pointing to a single service
-- Using Route 53 for direct traffic routing to AWS service endpoints
-- No need for SSL termination or request distribution
+### VPC Configuration
+| Variable | Description | Type | Default |
+|----------|-------------|------|---------|
+| `use_vpc` | Enable VPC usage | `bool` | `true` |
+| `create_vpc` | Create new VPC | `bool` | `true` |
+| `vpc_cidr` | VPC CIDR block | `string` | `"10.0.0.0/16"` |
+| `num_zones` | Number of availability zones | `number` | `2` |
 
-### When You Would Need a Load Balancer
-- Distributing traffic across multiple instances/containers
-- SSL/TLS termination requirements
-- Health checks and automatic failover needs
-- Handling varying loads
-- Running custom web servers (e.g., EC2 instances)
-- Layer 7 (application layer) routing requirements
+### DNS Configuration
+| Variable | Description | Type | Default |
+|----------|-------------|------|---------|
+| `create_hosted_zone` | Create Route53 zone | `bool` | `false` |
+| `domain_name` | Domain name | `string` | `null` |
+| `auto_renew` | Auto-renew domain | `bool` | `true` |
 
-### Current Implementation
-This infrastructure uses Route 53 to directly route traffic to AWS service endpoints, eliminating the need for a load balancer. This approach:
-- Reduces infrastructure costs
-- Simplifies the architecture
-- Leverages AWS's built-in high availability
-- Maintains security through AWS's native service endpoints
+## 🔍 Infrastructure Validation
+
+### DNS and Connectivity Testing
+
+```bash
+# Test DNS resolution
+dig <your-sftp-endpoint>
+
+# Test SFTP connectivity
+sftp -P 22 username@<your-sftp-endpoint>
+```
+
+### S3 Access Verification
+```bash
+# List contents of SFTP home directory
+aws s3 ls s3://<your-bucket>/<sftp-home-directory>
+```
+
+## 🛡️ Security Features
+
+- VPC endpoint isolation (when VPC is enabled)
+- IAM role-based access control
+- S3 bucket encryption
+- SFTP protocol security
+- DNS security with Route53
+
+## 📝 Notes
+
+- DNS propagation may take up to 48 hours
+- VPC endpoints enable private communication
+- S3 bucket names must be globally unique
+- SFTP users are managed through IAM roles
+
+## 🚨 Common Issues
+
+1. **Connection Issues**
+   - Verify security group rules
+   - Check VPC endpoint configuration
+   - Confirm IAM permissions
+
+2. **DNS Problems**
+   - Verify Route53 record creation
+   - Check domain ownership
+   - Allow time for DNS propagation
+
+3. **S3 Access**
+   - Verify IAM role permissions
+   - Check S3 bucket policy
+   - Confirm SFTP user home directory configuration
+
+## 📚 Additional Resources
+
+- [AWS Transfer Family Documentation](https://aws.amazon.com/aws-transfer-family/)
+- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [SFTP Protocol Information](https://tools.ietf.org/html/rfc4251)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
