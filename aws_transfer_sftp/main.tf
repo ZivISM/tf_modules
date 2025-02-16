@@ -1,6 +1,4 @@
-# Insert variables here for a full sftp server, s3 bucket, route53, and iam.check "name" {
-# The module does not create an alb, so you need to create an alb and pass the name to the module.
-
+# Insert variables here for a full sftp server, s3 bucket, route53
 module "sftp_transfer" {
   source = "./modules/transfer_server"
 ###############################################################################
@@ -20,7 +18,7 @@ module "sftp_transfer" {
   alb_name           = 
 
 ###############################################################################
-# IAM
+# Transfer Server
 ############################################################################### 
   sftp_username      = 
   sftp_home_directory = 
