@@ -2,7 +2,6 @@
 # VPC Locals
 ###############################################################################
 locals {
-  vpc_id = var.create_vpc ? module.vpc[0].vpc_id : var.existing_vpc_id
   subnet_ids = var.create_vpc ? module.vpc[0].private_subnets : []
 }
 
