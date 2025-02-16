@@ -38,9 +38,9 @@ resource "aws_route53_record" "sftp" {
 
 resource "aws_api_gateway_domain_name" "sftp" {
   domain_name              = "sftp.${var.domain_name}"
-  regional_domain_name     = "sftp.${var.domain_name}"
-  regional_certificate_arn = module.acm.acm_certificate_arn
-  security_policy         = "TLS_1_3"
+
+  regional_certificate_arn = module.acm[0].acm_certificate_arn
+  security_policy         = "TLS_1_2"
   
   tags = {
     Name    = "sftp.${var.domain_name}"
@@ -55,7 +55,6 @@ module "acm" {
   source  = "terraform-aws-modules/acm/aws"
   version = "~> 4.0"
 
-  # Only create if use_vpc is true and create_hosted_zone is true
   count = var.use_vpc && var.create_hosted_zone ? 1 : 0
 
   domain_name = var.domain_name

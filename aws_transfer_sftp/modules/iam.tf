@@ -13,8 +13,6 @@ resource "aws_iam_role" "transfer_server_role" {
       }
     ]
   })
-
-  depends_on = [ aws_iam_role_policy.transfer_server_policy ]
 }
 
 resource "aws_iam_role_policy" "transfer_server_policy" {

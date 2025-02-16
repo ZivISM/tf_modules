@@ -56,7 +56,7 @@ resource "aws_security_group" "sftp" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = module.vpc.private_subnet_cidrs
+    cidr_blocks = module.vpc[0].private_subnet_cidrs
   }
 
   egress {

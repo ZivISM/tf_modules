@@ -60,7 +60,7 @@ module "vpc_endpoints" {
   count = var.create_vpc ? 1 : 0
 
   vpc_id             = var.create_vpc ? module.vpc[0].vpc_id : var.existing_vpc_id
-  security_group_ids = [module.eks.cluster_security_group_id]
+  security_group_ids = [ aws_security_group.sftp.id ]
   
   endpoints = local.vpc_endpoints
 }
