@@ -45,3 +45,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.bak
+# Local Terraform workspace files
+.terraform.lock.hcl
+
+.gitignore
