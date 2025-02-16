@@ -34,7 +34,7 @@ module "sftp_transfer" {
   domain_name         = "zivoosh.xyz"      # Required if create_hosted_zone = true
   auto_renew         = false               # Required if create_hosted_zone = true
   force_destroy      = true               # Required if create_hosted_zone = true
-  route53_record_zone_id = "Z123456789ABC"   # Required if create_hosted_zone = false
+  route53_record_zone_id = null   # Required if create_hosted_zone = false
   
   ###############################################################################
   # SFTP Configuration
