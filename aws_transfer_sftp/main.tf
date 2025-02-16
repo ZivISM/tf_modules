@@ -7,8 +7,8 @@ module "sftp_transfer" {
 # General
 ###############################################################################
   project              = 
-  transfer_server_name = 
-  s3_bucket_name       = 
+  transfer_server_name =    
+  s3_bucket_name       =    
 
 ###############################################################################
 # Route53
