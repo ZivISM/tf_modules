@@ -5,6 +5,15 @@ module "s3_bucket" {
 
   control_object_ownership = true
   object_ownership         = "BucketOwnerEnforced"
+  
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
 
   versioning = {
     enabled = true
