@@ -45,6 +45,12 @@ variable "use_vpc" {
 ###############################################################################
 # Route53
 ###############################################################################
+variable "create_hosted_zone" {
+  type        = bool
+  description = "Whether to create a Route53 hosted zone"
+  default     = false
+}
+
 variable "domain_name" {
   description = "Domain name for the SFTP endpoint"
   type        = string
@@ -80,6 +86,15 @@ variable "existing_vpc_id" {
   default     = null
 }
 
+variable "existing_subnet_ids" {
+  type        = list(string)
+  description = "List of existing subnet IDs if not creating a new VPC"
+  default     = []
+}
+
+###############################################################################
+# VPC configuration if creating a new VPC
+###############################################################################
 variable "vpc_cidr" {
   type        = string
   description = "CIDR block for VPC if creating a new one"
@@ -122,11 +137,5 @@ variable "additional_allowed_endpoints" {
       subnet_ids          = []
     }
   }
-}
-
-variable "existing_subnet_ids" {
-  type        = list(string)
-  description = "List of existing subnet IDs if not creating a new VPC"
-  default     = []
 }
 

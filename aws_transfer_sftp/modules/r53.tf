@@ -1,11 +1,14 @@
 ###############################################################################
-# Route53 Zone
+# Route53 Zone (Optional)
 ###############################################################################
 resource "aws_route53_zone" "main" {
+  # Only create if use_vpc is true and create_hosted_zone is true
+  count = var.use_vpc && var.create_hosted_zone ? 1 : 0
+  
   name = var.domain_name
   force_destroy = var.force_destroy
 
-  # VPC association if using VPC endpoint
+  # VPC association for private hosted zone
   dynamic "vpc" {
     for_each = var.use_vpc ? [1] : []
     content {
@@ -20,10 +23,13 @@ resource "aws_route53_zone" "main" {
 }
 
 ###############################################################################
-# Route53 Records
+# Route53 Records (Optional)
 ###############################################################################
 resource "aws_route53_record" "sftp" {
-  zone_id = aws_route53_zone.main.zone_id
+  # Only create if use_vpc is true and create_hosted_zone is true
+  count = var.use_vpc && var.create_hosted_zone ? 1 : 0
+
+  zone_id = aws_route53_zone.main[0].zone_id
   name    = "sftp.${var.domain_name}"
   type    = "CNAME"
   ttl     = "300"
@@ -43,29 +49,26 @@ resource "aws_api_gateway_domain_name" "sftp" {
 }
 
 ###############################################################################
-# ACM Certificate
+# ACM Certificate (Optional)
 ###############################################################################
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
   version = "~> 4.0"
 
+  # Only create if use_vpc is true and create_hosted_zone is true
+  count = var.use_vpc && var.create_hosted_zone ? 1 : 0
+
   domain_name = var.domain_name
-  zone_id    = aws_route53_zone.main.zone_id
-
+  zone_id    = aws_route53_zone.main[0].zone_id
+  
   validation_method = "DNS"
-
-  subject_alternative_names = [
-    "*.${var.domain_name}",
-  ]
-
+  subject_alternative_names = ["*.${var.domain_name}"]
   wait_for_validation = false
 
   tags = {
-    Name        = var.domain_name
-    Project     = var.project
-    Terraform   = "true"
+    Name      = var.domain_name
+    Project   = var.project
+    Terraform = "true"
   }
-
-  depends_on = [aws_route53_zone.main]
 }
 
