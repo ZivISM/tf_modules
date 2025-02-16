@@ -1,25 +1,33 @@
 # Insert variables here for a full sftp server, s3 bucket, route53
 module "sftp_transfer" {
-  source = "./modules/transfer_server"
-###############################################################################
-# General
-###############################################################################
+  source = "./modules"
+
+  # Project Configuration
   project              = 
-  transfer_server_name =    
-  s3_bucket_name       =    
+  transfer_server_name = 
+  s3_bucket_name       = 
+  aws_region           = 
 
-###############################################################################
-# Route53
-###############################################################################
+  # VPC Configuration
+  use_vpc    = 
+  create_vpc =   # Set to false if using existing VPC
+  vpc_cidr   = 
+  num_zones  = 
+  single_nat_gateway = 
+  enable_nat_gateway = 
+  
+  # Only needed if create_vpc = false
+  existing_vpc_id = null
+  
   domain_name         = 
-  auto_renew         = 
-  force_destroy      = 
+  auto_renew          = 
+  force_destroy       = 
   route53_record_zone = 
-  alb_name           = 
 
-###############################################################################
-# Transfer Server
-############################################################################### 
-  sftp_username      = 
+  sftp_username       = 
   sftp_home_directory = 
+
+  additional_allowed_endpoints = {
+    # Add more endpoints as needed
+  }
 }

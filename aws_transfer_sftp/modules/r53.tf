@@ -3,11 +3,18 @@
 ###############################################################################
 resource "aws_route53_zone" "main" {
   name = var.domain_name
-
   force_destroy = var.force_destroy
 
+  # VPC association if using VPC endpoint
+  dynamic "vpc" {
+    for_each = var.use_vpc ? [1] : []
+    content {
+      vpc_id = local.vpc_id
+    }
+  }
+
   tags = {
-    Name = var.domain_name
+    Name    = var.domain_name
     Project = var.project
   }
 }
@@ -18,13 +25,9 @@ resource "aws_route53_zone" "main" {
 resource "aws_route53_record" "sftp" {
   zone_id = aws_route53_zone.main.zone_id
   name    = "sftp.${var.domain_name}"
-  type    = "A"
-
-  alias {
-    name                   = aws_api_gateway_domain_name.sftp.regional_domain_name
-    zone_id               = aws_api_gateway_domain_name.sftp.regional_zone_id
-    evaluate_target_health = true
-  }
+  type    = "CNAME"
+  ttl     = "300"
+  records = [aws_transfer_server.sftp.endpoint]
 }
 
 resource "aws_api_gateway_domain_name" "sftp" {

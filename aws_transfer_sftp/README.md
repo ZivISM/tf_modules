@@ -14,7 +14,7 @@ This Terraform project sets up a secure SFTP server using AWS Transfer Family wi
 
 - Terraform >= 1.0
 - AWS CLI configured with appropriate credentials
-- A registered domain name (for Route53 configuration)
+- A registered domain name (for Route53 configuration and api gateway)
 
 ## Usage
 
@@ -24,10 +24,10 @@ This Terraform project sets up a secure SFTP server using AWS Transfer Family wi
 ```hcl
 module "sftp_transfer" {
   source = "./modules/transfer_server"
-  project = "my-project"
   
+  project              = "my-project"
   transfer_server_name = "sftp-server"
-  s3_bucket_name = "my-sftp-bucket"
+  s3_bucket_name       = "my-sftp-bucket"
   
   domain_name = "example.com" # Your pre-registered domain
   auto_renew = true
