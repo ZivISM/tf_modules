@@ -38,11 +38,11 @@ module "sftp_transfer" {
 ###############################################################################
 # Route53 Configuration (Optional)
 ###############################################################################
-  create_hosted_zone  = true               # Whether to create Route53 hosted zone
-  domain_name         = "zivoosh.xyz"      # Required if create_hosted_zone = true
-  auto_renew         = false               # Required if create_hosted_zone = true
-  force_destroy      = true               # Required if create_hosted_zone = true
-  route53_record_zone_id = null   # Required if create_hosted_zone = false
+  create_hosted_zone  = true                   # Whether to create Route53 hosted zone
+  domain_name         = "zivoosh.testing"      # Required if create_hosted_zone = true
+  auto_renew         = false                   # Required if create_hosted_zone = true
+  force_destroy      = true                    # Required if create_hosted_zone = true
+  route53_record_zone_id = null                # Required if create_hosted_zone = false
   
 
 ###############################################################################

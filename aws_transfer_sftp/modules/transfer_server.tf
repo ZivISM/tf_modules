@@ -4,22 +4,16 @@
 resource "aws_transfer_server" "sftp" {
   identity_provider_type = "SERVICE_MANAGED"
   protocols             = ["SFTP"]
+  domain               = "S3"
+  endpoint_type        = var.use_vpc ? "VPC" : "PUBLIC"
   
-  # Use a variable to control endpoint type
-  endpoint_type         = var.use_vpc ? "VPC" : "PUBLIC"
-  
-  # Conditional VPC configuration
-  dynamic "endpoint_details" {
-    for_each = var.use_vpc ? [1] : []
-    content {
-      vpc_id             = local.vpc_id
-      subnet_ids         = local.subnet_ids
-      security_group_ids = [aws_security_group.sftp[0].id]
-    }
+  endpoint_details {
+    address_allocation_ids = var.use_vpc ? null : []  # Empty list for regional endpoint
+    vpc_id                 = var.use_vpc ? local.vpc_id : null
+    subnet_ids             = var.use_vpc ? local.subnet_ids : null
+    security_group_ids     = var.use_vpc ? [aws_security_group.sftp[0].id] : null
   }
 
-  domain = "S3"
-  
   tags = {
     Name    = var.transfer_server_name
     Project = var.project
