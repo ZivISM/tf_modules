@@ -17,7 +17,7 @@ module "sftp_transfer" {
 # SFTP Configuration
 ###############################################################################
   sftp_home_directory = "/home/sftp-user"  # Optional: Defaults to /home
-  sftp_users       = ["zivoosh-testing-sftp-user", "zivoosh-testing-sftp-user2", "zivoosh-testing-sftp-user3"]     # Required: SFTP user name
+  sftp_users       = ["sftp-user", "sftp-user2", "sftp-user3"]     # Required: SFTP user name
 
 ###############################################################################
 # VPC Configuration
