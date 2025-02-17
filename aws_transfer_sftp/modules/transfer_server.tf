@@ -24,8 +24,6 @@ resource "aws_transfer_server" "sftp" {
     Name    = var.transfer_server_name
     Project = var.project
   }
-
-  depends_on = var.use_vpc ? [module.vpc] : []
 }
 
 ###############################################################################
