@@ -17,13 +17,13 @@ module "sftp_transfer" {
 # SFTP Configuration
 ###############################################################################
   sftp_home_directory = "/home/sftp-user"  # Optional: Defaults to /home
-  sftp_users       = ["zivoosh-testing-sftp-user"]     # Required: SFTP user name
+  sftp_users       = ["zivoosh-testing-sftp-user", "zivoosh-testing-sftp-user2", "zivoosh-testing-sftp-user3"]     # Required: SFTP user name
 
 ###############################################################################
 # VPC Configuration
 ###############################################################################
-  use_vpc    = false    # Required: Whether to use VPC (true/false)
-  create_vpc = false    # Required: Whether to create new VPC (true/false)
+  use_vpc    = true    # Required: Whether to use VPC (true/false)
+  create_vpc = true    # Required: Whether to create new VPC (true/false)
 
   # Required if create_vpc = true
   vpc_cidr            = "10.0.0.0/16"
