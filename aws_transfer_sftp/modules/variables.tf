@@ -24,9 +24,10 @@ variable "transfer_server_name" {
   description = "The transfer server name"
 }
 
-variable "sftp_username" {
-  description = "Username for SFTP access"
-  type        = string
+variable "sftp_users" {
+  description = "List of SFTP usernames to create"
+  type        = list(string)
+  default     = []
 }
 
 variable "sftp_home_directory" {

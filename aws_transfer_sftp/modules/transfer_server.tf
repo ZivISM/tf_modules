@@ -31,22 +31,23 @@ resource "aws_transfer_server" "sftp" {
 ###############################################################################
 # Transfer User
 ###############################################################################
-resource "aws_transfer_user" "sftp_user" {
+resource "aws_transfer_user" "sftp_users" {
+  for_each = toset(var.sftp_users)
+
   server_id = aws_transfer_server.sftp.id
-  user_name = var.sftp_username
+  user_name = each.value
   role      = aws_iam_role.transfer_server_role.arn
 
   home_directory_type = "LOGICAL"
-
   home_directory_mappings {
     entry  = "/"
-    target = "/${module.s3_bucket.s3_bucket_id}${var.sftp_home_directory}"
+    target = "/${module.s3_bucket.s3_bucket_id}/home/${each.value}"
   }
 
   tags = merge(
     local.tags,
     {
-      Name = "${var.transfer_server_name}-user"
+      Name = "${var.transfer_server_name}-user-${each.value}"
     }
   )
   
